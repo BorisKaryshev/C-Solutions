@@ -1,33 +1,31 @@
 #include <stdio.h>
 
-int main() // Оно почему-то не проходит 4-ый тест. Я отредактирую эту программу ближе к сроку её сдачи. Если этого не произошло, то я забыл, прошу напомнить.
-{
-    char l, lbegin, lend;
-    int flag = 0;
+char output (char begin, char end) { // В C элементы типа char закодированны числом, т.ч. можно перебрать все подряд идущие символы алфавита вычитая/прибавляя 1.
+	while (begin > end) { 
+		putchar(begin);
+		begin--;
+	}
+	while (begin < end) {
+		putchar(begin);
+		begin++;
+	}
+	putchar(begin);
+	return begin;
+}
 
-    while ((l = getchar()) != EOF) {
-        if (l == '-') flag = 1;
-        else if (flag == 0) lbegin = l;
-        else {
-            lend = l;
-            break;
-        }
-    }
-    if (lbegin > lend) {
-        while (lbegin != lend) {
-            int letter = lbegin;
-            putchar(letter);
-            lbegin--;
-        }
-        putchar(lend);
-    }
-    else {
-        while (lbegin != lend) {
-            int letter = lbegin;
-            putchar(letter);
-            lbegin++;
-        }
-        putchar(lend);
-    }
-    return 0;
+int main() {
+	char l[3] = {' ', ' ', ' '};
+	char end = ' ';
+	while ((l[2] = getchar()) != '\n') {
+		if (l[0] != ' ' && l[2] != ' ' && l[1] == '-') { // Если выполняются условия для вывода последовательности, то выводим её.
+			if (end == l[0] && l[0] > l[2]) l[0]--; // Проверка не совпадает ли начальный символ новой последовательности с конечным символом старой последовательности (повторов быть не должно).
+			else if (end == l[0] && l[0] < l[2]) l[0]++;
+			end = output(l[0], l[2]);
+		}
+		else if (l[1] == '-') putchar('-'); // Выводим незначащие тире.
+		l[0] = l[1];
+		l[1] = l[2];
+	}
+	if (l[1] == '-') putchar('-'); // Выводим незначащие тире.
+	return 0;
 }
